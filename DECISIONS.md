@@ -17,6 +17,11 @@ Format: date · decision · why · alternative rejected.
 - **`revoke … from public` as well as anon.** Postgres grants EXECUTE on new functions to PUBLIC by default, so revoking only from anon would leave `verify_claim` callable by anyone. Attack test T10d checks this.
 - **The attack suite is one PL/pgSQL function that returns a PASS/FAIL table** and rolls itself back (forced SQLSTATE `SLRBK`). The Supabase SQL editor shows only the last statement's result, so a literal `begin; … rollback;` would end on ROLLBACK and show nothing. Users are still simulated with `role = authenticated` + `request.jwt.claims`.
 - **SQL syntax was checked locally with libpg_query (the real Postgres parser, WASM)** before the first run, so syntax errors are ruled out. Semantics are what the attack run tests.
+- **`NEXT_PUBLIC_SITE_URL` is optional.** Links are built from the request's own host (`x-forwarded-host` on Vercel), so a deploy works with only the three required variables. This cuts one confusing setup step (it confused me during DEPLOY 1). The variable stays in `.env.example` as an override.
+- **F2 draft pipeline.** `POST /api/draft` loads the proof as the user (RLS), refuses non-owners even if RLS would let a reviewer read the proof, wraps the evidence in `<evidence>…</evidence>` and neutralizes any `</evidence>` the worker typed, and asks Gemini for JSON with a response schema. zod then validates the answer, which is stored only in `ai_drafts`. Any HTTP error, timeout (25 s) or invalid shape falls back to the deterministic simulated draft, labeled SIMULATED AI OUTPUT. A proof can be re-drafted at most 5 times (free-tier quota guard). *Rejected:* letting the route write `claims` directly to save a click, because the AI must never write claims.
+- **Overclaim check runs twice:** deterministic rules merged into the stored flags, and again live in the editor as the worker types. Flags only warn; they never block and never touch status. AI flags disappear once the flagged word is gone.
+- **Required labels are bilingual:** the exact strings from the prompt ("AI-organized · status unchanged by AI", "SIMULATED AI OUTPUT", "Invented demo data") plus a plain-Spanish line next to each.
+- **Unit tests (vitest, `npm test`):** zod limits (4,000 vs 4,001 / 10,000), overclaim rules, the simulated draft, and the Gemini path with a stubbed fetch (prompt-injection wrapper, fallback on a malformed answer). `@types/node` bumped to 24 to match the runtime.
 
 ## Bugs found
 
@@ -28,4 +33,4 @@ Format: date · decision · why · alternative rejected.
 
 ## Mañana, primer movimiento:
 
-DEPLOY 1: create the GitHub repo, push, import into Vercel with the env vars, add the Vercel URL to Supabase + Google, confirm login on the live URL. Then F2.
+Test F2/F3 on the live URL (create a proof that says «experta verificada», approve, check everything lands DECLARADO with 1 event). Then F4 (vouch invite + review request).

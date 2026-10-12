@@ -4,7 +4,7 @@ Sello turns a beginner's existing work into claims with an honest trust level: *
 The AI only organizes text. Postgres alone decides status.
 Its top metric is whether the proof you sent was **opened and acted on**, not how many proofs were created.
 
-- **Live URL:** _pending DEPLOY 1_
+- **Live URL:** https://sello-gamma.vercel.app
 - **Spec:** [`docs/PACKET.md`](docs/PACKET.md) · build prompt: [`docs/IMPLEMENTATION_PROMPT.md`](docs/IMPLEMENTATION_PROMPT.md) · decision log: [`DECISIONS.md`](DECISIONS.md)
 
 ## Run locally
