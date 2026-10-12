@@ -15,7 +15,7 @@ npm install
 npm run dev   # http://localhost:3700
 ```
 
-Database: paste `supabase/migrations/001_sello.sql` into the Supabase SQL editor and run it. Attack tests: paste `supabase/tests/attacks.sql` and run it (it rolls back).
+Database: paste `supabase/migrations/001_sello.sql` into the Supabase SQL editor and run it **before anyone signs in** (then `002_backfill_profiles.sql`, harmless if nobody had). Attack tests: paste `supabase/tests/attacks.sql` and run it (it rolls back).
 
 ## Approve a reviewer (manual, in the SQL editor)
 
@@ -32,10 +32,10 @@ where id = (select id from auth.users where email = 'reviewer@example.com');
 | ✅ | `.env.local` gitignored from commit 1; `.env.example` holds names only |
 | ✅ | No service-role key anywhere in the app |
 | ✅ | Google sign-in (tested locally); `proxy.ts` protects `/app`, `/review`, `/vouch`, and each page checks again |
-| ⬜ | RLS on every table |
-| ⬜ | Status changes only through `security definer` transition functions |
-| ⬜ | Append-only `status_events` (no insert/update/delete policies) |
+| ✅ | RLS on every table |
+| ✅ | Status changes only through `security definer` transition functions (flag + not-an-API-role check) |
+| ✅ | Append-only `status_events` (no insert/update/delete policies, guard trigger) |
 | ⬜ | zod on every form and API route, same limits as the DB |
 | ⬜ | Gemini key server-only; AI writes only to `ai_drafts` |
-| ⬜ | Attack suite passes |
-| ⬜ | Secret grep returns zero hits |
+| ✅ | Attack suite passes (69/69, 2026-10-11) |
+| ✅ | Secret grep returns zero hits (`npm run secrets`) |

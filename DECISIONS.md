@@ -20,8 +20,12 @@ Format: date · decision · why · alternative rejected.
 
 ## Bugs found
 
-_(none yet)_
+1. **2026-10-11 · Profiles missing for anyone who signed in before the migration.** The first Google login (testing F1) happened before `001_sello.sql` existed, so the `on_auth_user_created` trigger never ran and that user had no `profiles` row. `/app` showed "Tu perfil todavía no existe". *Fix:* `002_backfill_profiles.sql` (idempotent `insert … select from auth.users on conflict do nothing`). *Lesson:* run the migration before anyone signs in, which the README order now says.
+
+## Attack suite runs
+
+- **2026-10-11, run 1: 69 of 69 PASS** (first run, no fixes needed). The prompt expected at least one FAIL. None came up, likely because the bypasses were designed in before the first run (see the "two locks" entry above). The "at least one bug found, fixed, redeployed" requirement stays open for the mechanical pass in the UI (commit 7).
 
 ## Mañana, primer movimiento:
 
-Run `001_sello.sql` then `attacks.sql` in the Supabase SQL editor, fix any FAIL, then DEPLOY 1 (GitHub repo + Vercel).
+DEPLOY 1: create the GitHub repo, push, import into Vercel with the env vars, add the Vercel URL to Supabase + Google, confirm login on the live URL. Then F2.
