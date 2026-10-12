@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+/*
+ * Una sola paleta clara (el mockup del PACKET es light theme). Los tres colores
+ * de estado son el corazón visual: gris = lo dices tú, ámbar = alguien lo vio,
+ * verde = revisión independiente.
+ */
+:root {
+  --background: #f6f7f9;
+  --foreground: #14171c;
+  --muted: #5b6370;
+  --card: #ffffff;
+  --line: #e2e5ea;
+  --ink: #1f3a5f;
+  --declared: #6b7280;
+  --declared-soft: #f1f2f4;
+  --vouched: #b45309;
+  --vouched-soft: #fef3c7;
+  --verified: #15803d;
+  --verified-soft: #dcfce7;
+  --bad: #b91c1c;
+  --bad-soft: #fee2e2;
+  --ai: #5b21b6;
+  --ai-soft: #ede9fe;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-declared: var(--declared);
+  --color-declared-soft: var(--declared-soft);
+  --color-vouched: var(--vouched);
+  --color-vouched-soft: var(--vouched-soft);
+  --color-verified: var(--verified);
+  --color-verified-soft: var(--verified-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-ai: var(--ai);
+  --color-ai-soft: var(--ai-soft);
+  --font-sans: var(--font-geist-sans);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
