@@ -31,7 +31,7 @@ where id = (select id from auth.users where email = 'reviewer@example.com');
 |---|---|
 | ✅ | `.env.local` gitignored from commit 1; `.env.example` holds names only |
 | ✅ | No service-role key anywhere in the app |
-| ✅ | Google sign-in; `proxy.ts` protects `/app`, `/review`, `/vouch`, and each page checks again |
+| ✅ | Google sign-in (tested locally); `proxy.ts` protects `/app`, `/review`, `/vouch`, and each page checks again |
 | ⬜ | RLS on every table |
 | ⬜ | Status changes only through `security definer` transition functions |
 | ⬜ | Append-only `status_events` (no insert/update/delete policies) |
